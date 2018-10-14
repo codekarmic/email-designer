@@ -10,9 +10,9 @@ h2 {
 
 .center-content {
   background: #e6e6e6;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
-  flex-flow: column wrap; }
+  flex-flow: column; }
   .center-content > * {
     flex: 1 1 auto; }
   .center-content header {
@@ -23,14 +23,15 @@ h2 {
   .center-content main#app {
     display: flex;
     flex-flow: row wrap;
-    max-height: 90vh;
+    justify-content: space-between;
     overflow: hidden; }
     .center-content main#app > * {
-      flex: 0 1 50%; }
+      flex: 0 1 49%; }
     .center-content main#app #displayarea {
       padding: 10px;
       margin: 0 auto;
-      overflow: scroll; }
+      overflow: scroll;
+      max-height: 100%; }
       .center-content main#app #displayarea *[data-state="drop"] {
         min-height: 215px;
         color: #fff;
@@ -55,8 +56,8 @@ h2 {
         font-size: 2em;
         font-family: sans-serif; }
     .center-content main#app #workspace {
-      overflow-y: scroll;
-      overflow-x: none; }
+      max-height: 100%;
+      overflow: scroll; }
       .center-content main#app #workspace *[data-state="drag"] {
         cursor: pointer;
         display: inline-block;

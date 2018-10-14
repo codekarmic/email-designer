@@ -111,7 +111,7 @@ let DragDrop = function(o) {
             }
 
             if (this.type === "dragend") {
-                this.target.draggable = false;
+                this.target.removeAttribute('draggable');
                 instance.dragkey = key;
 
                 // switch dragging flag to false
@@ -160,9 +160,6 @@ let DragDrop = function(o) {
                 target : this.target,
             }
 
-            // Disable drag if true by default
-            this.target.draggable = false;
-
             if (this.type === "dragenter" && instance.dragging) {
                 // enables dropzones when dragging
                 if (this.target.dataset.state === 'drop') {
@@ -201,7 +198,7 @@ let DragDrop = function(o) {
 
             if (this.type === "drop") {
                 if (this.target !== dragged.parentNode) {
-                    dragged.draggable = false;
+                    dragged.removeAttribute('draggable');
                     dragging = false;
 
                     switch(dragged.dataset.method) {

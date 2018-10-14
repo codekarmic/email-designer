@@ -14,9 +14,9 @@ h2 {
 .center-content 
 {
     background: rgba(230,230,230,1);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column;
 
     & > * {
         flex: 1 1 auto;
@@ -34,11 +34,11 @@ h2 {
     {
         display: flex;
         flex-flow: row wrap;
-        max-height: 90vh;
+        justify-content: space-between;
         overflow: hidden;
 
         & > * {
-            flex: 0 1 50%;
+            flex: 0 1 49%;
         }
 
         #displayarea
@@ -46,6 +46,7 @@ h2 {
             padding: 10px;
             margin: 0 auto;
             overflow: scroll;
+            max-height: 100%;
 
             *[data-state="drop"]
             {
@@ -83,8 +84,8 @@ h2 {
 
         #workspace
         {
-            overflow-y: scroll;
-            overflow-x: none;
+            max-height: 100%;
+            overflow: scroll;
         
             *[data-state="drag"] {
                 cursor: pointer;
