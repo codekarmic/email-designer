@@ -187,7 +187,8 @@ let DragDrop = function(o) {
             }
 
             if (this.type === "dragleave") {
-                if (this.target !== dragged.parentNode) {
+                if (this.target !== dragged.parentNode
+                    && this.target.dataset.state === 'drop') {
                     this.target.style.borderStyle = "";
                     this.target.style.background = "";
                 }
