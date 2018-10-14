@@ -1,0 +1,195 @@
+* {
+  box-sizing: border-box; }
+
+body {
+  padding: 0;
+  margin: 0; }
+
+h2 {
+  font-family: sans-serif; }
+
+.center-content {
+  background: #e6e6e6;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column wrap; }
+  .center-content > * {
+    flex: 1 1 auto; }
+  .center-content header {
+    background: white;
+    box-shadow: 0 5px 21px rgba(90, 90, 90, 0.1);
+    font-family: sans-serif;
+    padding: 0 2em; }
+  .center-content main#app {
+    display: flex;
+    flex-flow: row wrap;
+    max-height: 90vh;
+    overflow: hidden; }
+    .center-content main#app > * {
+      flex: 0 1 50%; }
+    .center-content main#app #displayarea {
+      padding: 10px;
+      margin: 0 auto;
+      overflow: scroll; }
+      .center-content main#app #displayarea *[data-state="drop"] {
+        min-height: 215px;
+        color: #fff;
+        box-sizing: border-box;
+        background: rgba(150, 150, 150, 0.1);
+        border: 4px solid #c8c8c8;
+        border-radius: 7px;
+        margin-bottom: 10px;
+        padding: 15px;
+        flex: 0 1 49%;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        box-sizing: content-box; }
+        .center-content main#app #displayarea *[data-state="drop"] *[data-state="drag"] {
+          margin-bottom: 0; }
+      .center-content main#app #displayarea .initial-block:before {
+        content: 'Drag Blocks Here To Start';
+        color: #787878;
+        font-size: 2em;
+        font-family: sans-serif; }
+    .center-content main#app #workspace {
+      overflow-y: scroll;
+      overflow-x: none; }
+      .center-content main#app #workspace *[data-state="drag"] {
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        margin-bottom: 15px;
+        transition: 0.2s all; }
+        .center-content main#app #workspace *[data-state="drag"] * {
+          pointer-events: none; }
+        .center-content main#app #workspace *[data-state="drag"]:hover {
+          box-shadow: 0 0 50px rbga(0, 0, 0, 0.9); }
+    .center-content main#app *[data-state="drag"] {
+      -webkit-touch-callout: none;
+      /* iOS Safari */
+      -webkit-user-select: none;
+      /* Safari */
+      -khtml-user-select: none;
+      /* Konqueror HTML */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* Internet Explorer/Edge */
+      user-select: none; }
+
+/* Cerberus Styles */
+#displayarea {
+  /* What it does: Remove spaces around the email design added by some email clients. */
+  /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+  /* What it does: Stops email clients resizing small text. */
+  /* What it does: Centers email on Android 4.4 */
+  /* What it does: Stops Outlook from adding extra spacing to tables. */
+  /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+  /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
+  /* What it does: Uses a better rendering method when resizing images in IE. */
+  /* What it does: A work-around for email clients meddling in triggered links. */
+  /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
+  /* If the above doesn't work, add a .g-img class to any image in question. */
+  /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+  /* Create one of these media queries for each additional viewport size you'd like to fix */
+  /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+  /* iPhone 6, 6S, 7, 8, and X */
+  /* iPhone 6+, 7+, and 8+ */
+  /* What it does: Hover styles for buttons */
+  /* Media Queries */ }
+  #displayarea html,
+  #displayarea body {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    height: 100% !important;
+    width: 100% !important; }
+  #displayarea * {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%; }
+  #displayarea div[style*="margin: 16px 0"] {
+    margin: 0 !important; }
+  #displayarea table,
+  #displayarea td {
+    mso-table-lspace: 0pt !important;
+    mso-table-rspace: 0pt !important; }
+  #displayarea table {
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 auto !important; }
+  #displayarea table table table {
+    table-layout: auto; }
+  #displayarea a {
+    text-decoration: none; }
+  #displayarea img {
+    -ms-interpolation-mode: bicubic; }
+  #displayarea *[x-apple-data-detectors],
+  #displayarea .unstyle-auto-detected-links *,
+  #displayarea .aBn {
+    border-bottom: 0 !important;
+    cursor: default !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important; }
+  #displayarea .a6S {
+    display: none !important;
+    opacity: 0.01 !important; }
+  #displayarea img.g-img + div {
+    display: none !important; }
+  @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+    #displayarea u ~ div .email-container {
+      min-width: 320px !important; } }
+  @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+    #displayarea u ~ div .email-container {
+      min-width: 375px !important; } }
+  @media only screen and (min-device-width: 414px) {
+    #displayarea u ~ div .email-container {
+      min-width: 414px !important; } }
+  #displayarea .button-td,
+  #displayarea .button-a {
+    transition: all 100ms ease-in; }
+  #displayarea .button-td-primary:hover,
+  #displayarea .button-a-primary:hover {
+    background: #555555 !important;
+    border-color: #555555 !important; }
+  @media screen and (max-width: 600px) {
+    #displayarea {
+      /* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
+      /* What it does: Forces table cells into full-width rows. */
+      /* And center justify these ones. */
+      /* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
+      /* What it does: Adjust typography on small screens to improve readability */ }
+      #displayarea .email-container {
+        width: 100% !important;
+        margin: auto !important; }
+      #displayarea .fluid {
+        max-width: 100% !important;
+        height: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important; }
+      #displayarea .stack-column,
+      #displayarea .stack-column-center {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        direction: ltr !important; }
+      #displayarea .stack-column-center {
+        text-align: center !important; }
+      #displayarea .center-on-narrow {
+        text-align: center !important;
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        float: none !important; }
+      #displayarea table.center-on-narrow {
+        display: inline-block !important; }
+      #displayarea .email-container p {
+        font-size: 17px !important; } }
+
+/*# sourceMappingURL=styles.css.map */
