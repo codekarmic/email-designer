@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function(evt) {
 			}
 
 			// Make all text editable
-			params.target.querySelectorAll('tr').forEach(function(el) {
-				el.setAttribute('contenteditable','true');
-			});
+			// params.target.querySelectorAll('tr').forEach(function(el) {
+			// 	el.setAttribute('contenteditable','true');
+			// });
 		}
 	});
 	dragdrop.init();

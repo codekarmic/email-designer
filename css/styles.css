@@ -35,19 +35,9 @@ h2 {
       .center-content main#app #displayarea *[data-state="drop"] {
         min-height: 215px;
         color: #fff;
-        box-sizing: border-box;
-        background: rgba(150, 150, 150, 0.1);
-        border: 4px solid #c8c8c8;
-        border-radius: 7px;
-        margin-bottom: 10px;
-        padding: 15px;
-        flex: 0 1 49%;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: center;
-        align-items: center;
         position: relative;
-        box-sizing: content-box; }
+        padding-top: 15px;
+        padding-bottom: 15px; }
         .center-content main#app #displayarea *[data-state="drop"] *[data-state="drag"] {
           margin-bottom: 0; }
       .center-content main#app #displayarea .initial-block:before {
@@ -55,6 +45,45 @@ h2 {
         color: #787878;
         font-size: 2em;
         font-family: sans-serif; }
+      .center-content main#app #displayarea .block {
+        position: relative; }
+        .center-content main#app #displayarea .block:hover {
+          cursor: pointer;
+          outline: 3px solid rgba(75, 75, 200, 0.8); }
+          .center-content main#app #displayarea .block:hover div[data-blockaction="delete"] {
+            display: block; }
+        .center-content main#app #displayarea .block div[data-append="before"] {
+          height: 10px;
+          width: 100%;
+          position: absolute;
+          top: 0; }
+        .center-content main#app #displayarea .block div[data-append="after"] {
+          height: 10px;
+          width: 100%;
+          position: absolute;
+          bottom: 0; }
+        .center-content main#app #displayarea .block div[data-blockaction="delete"] {
+          display: none;
+          width: 20px;
+          height: 20px;
+          text-align: center;
+          box-sizing: content-box;
+          padding: 5px;
+          top: -10px;
+          right: -10px;
+          background: #646464;
+          outline: 0px solid rgba(0, 0, 0, 0.6);
+          transform: scale(1);
+          transition: 0.2s all;
+          position: absolute;
+          z-index: 2; }
+          .center-content main#app #displayarea .block div[data-blockaction="delete"]:hover {
+            cursor: pointer;
+            outline-width: 2px;
+            transform: scale(1.3);
+            background: #c83232; }
+          .center-content main#app #displayarea .block div[data-blockaction="delete"]:before {
+            content: 'x'; }
     .center-content main#app #workspace {
       max-height: 100%;
       overflow: scroll; }
