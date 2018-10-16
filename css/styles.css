@@ -50,8 +50,8 @@ h2 {
         .center-content main#app #displayarea .block:hover {
           cursor: pointer;
           outline: 3px solid rgba(75, 75, 200, 0.8); }
-          .center-content main#app #displayarea .block:hover div[data-blockaction="delete"] {
-            display: block; }
+          .center-content main#app #displayarea .block:hover div.block-controls {
+            display: inline-block; }
         .center-content main#app #displayarea .block div[data-append="before"] {
           height: 10px;
           width: 100%;
@@ -62,28 +62,48 @@ h2 {
           width: 100%;
           position: absolute;
           bottom: 0; }
-        .center-content main#app #displayarea .block div[data-blockaction="delete"] {
+        .center-content main#app #displayarea .block .block-controls {
           display: none;
-          width: 20px;
-          height: 20px;
+          background: rgba(0, 0, 0, 0.9);
+          border-radius: 15px;
+          position: absolute;
+          transform: translateY(-50%); }
+        .center-content main#app #displayarea .block div[data-blockaction="move"] {
+          display: inline-block;
           text-align: center;
-          box-sizing: content-box;
-          padding: 5px;
-          top: -10px;
-          right: -10px;
-          background: #646464;
+          padding: 15px;
           outline: 0px solid rgba(0, 0, 0, 0.6);
           transform: scale(1);
           transition: 0.2s all;
-          position: absolute;
+          z-index: 2; }
+          .center-content main#app #displayarea .block div[data-blockaction="move"]:hover {
+            cursor: pointer; }
+          .center-content main#app #displayarea .block div[data-blockaction="move"]:before {
+            content: 'move'; }
+        .center-content main#app #displayarea .block div[data-blockaction="edit"] {
+          display: inline-block;
+          text-align: center;
+          padding: 15px;
+          outline: 0px solid rgba(0, 0, 0, 0.6);
+          transform: scale(1);
+          transition: 0.2s all;
+          z-index: 2; }
+          .center-content main#app #displayarea .block div[data-blockaction="edit"]:hover {
+            cursor: pointer; }
+          .center-content main#app #displayarea .block div[data-blockaction="edit"]:before {
+            content: 'edit'; }
+        .center-content main#app #displayarea .block div[data-blockaction="delete"] {
+          display: inline-block;
+          text-align: center;
+          padding: 15px;
+          outline: 0px solid rgba(0, 0, 0, 0.6);
+          transform: scale(1);
+          transition: 0.2s all;
           z-index: 2; }
           .center-content main#app #displayarea .block div[data-blockaction="delete"]:hover {
-            cursor: pointer;
-            outline-width: 2px;
-            transform: scale(1.3);
-            background: #c83232; }
+            cursor: pointer; }
           .center-content main#app #displayarea .block div[data-blockaction="delete"]:before {
-            content: 'x'; }
+            content: 'close'; }
     .center-content main#app #workspace {
       max-height: 100%;
       overflow: scroll; }

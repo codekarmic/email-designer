@@ -14,8 +14,8 @@ let DragDrop = function(o) {
     this.draggables = document.querySelectorAll('*[data-state="drag"]');
     this.dropzones = document.querySelectorAll('*[data-state="drop"]');
     this.isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-    this.dragkey;
     this.dragging;
+    this.dragged;
     this.opts = o;
     this.settings = {
         dragstart      : function(){},
@@ -42,12 +42,99 @@ let DragDrop = function(o) {
 
         // set drag events on draggables
         Object.keys(instance.draggables).forEach(function(key) {
-            instance.setDragEvents.call(instance.draggables[key]);
+            instance.setEvents(instance.draggables[key],{
+                dragstart : function()
+                {
+                    let dt = this.dataTransfer;
+
+                    if (!instance.isIE11) {
+                        // removes ghost image on cursor (Firefox/Chrome)
+                        dt.setDragImage(new Image(), 0, 0);
+
+                        // initiates drag events (Firefox only)
+                        dt.setData('key', '');
+                    }
+
+                    // set handle for dragged element
+                    instance.dragged = this.target;
+
+                    // switch dragging flag to true
+                    instance.dragging = true;
+                },
+                drag : function()
+                {
+
+                },
+                dragend : function()
+                {
+                    this.target.removeAttribute('draggable');
+
+                    // switch dragging flag to false
+                    instance.dragging = false;
+                },
+                mousedown : function()
+                {
+                    this.target.draggable = true;
+                },
+            });
         });
 
         // set drop events on drop zones
         Object.keys(instance.dropzones).forEach(function(key) {
-            instance.setDropEvents.call(instance.dropzones[key]);
+            instance.setEvents(instance.dropzones[key],{
+                dragenter : function() {
+                    // enables dropzones when dragging
+                    if (this.target.dataset.state === 'drop') {
+                        if (this.target !== instance.dragged.parentNode) {
+                            this.preventDefault();
+                            this.target.style.outlineStyle = "dashed";
+                            this.target.style.outlineColor = "rgba(100,100,100,.8)";
+                        }
+                    }
+                },
+                dragover : function()
+                {
+                    // enables dropzones when dragging
+                    if(this.target.dataset.state === 'drop') {
+                        if (this.target !== instance.dragged.parentNode) {
+                            this.preventDefault();
+                        }
+                    }
+                },
+                dragleave : function()
+                {
+                    if (this.target !== instance.dragged.parentNode
+                        && this.target.dataset.state === 'drop') {
+                        this.target.style.outlineStyle = "";
+                        this.target.style.outlineColor = "";
+                    }
+                },
+                drop : function()
+                {
+                    if (this.target !== instance.dragged.parentNode
+                        && !this.target.dataset.append) {
+                        instance.dragged.removeAttribute('draggable');
+                        let clone = instance.dragged.cloneNode(true);
+                        dragging = false;
+
+                        switch(instance.dragged.dataset.method) {
+                            case 'move':
+                                this.target.appendChild(instance.dragged);
+                                break;
+
+                            case 'copy':
+                                appendNode(clone,this.target.querySelector('.email-container'));
+                                break;
+                        }
+
+                        this.target.style.outlineStyle = "";
+                        this.target.style.background = "";
+
+                        // switch dragging flag to true
+                        instance.dragging = true;
+                    }
+                },
+            });
         });
     };
 
@@ -63,241 +150,126 @@ let DragDrop = function(o) {
         return func;
     };
 
-    this.setDragEvents = function() 
+    this.setEvents = function(el,events)
     {
         let eventHandle;
         let eventFunc = function(evt) 
         {
-            let key = getKey(this.target,document.querySelectorAll('*[data-state="drag"]'));
             let params = {
                 self : this,
                 type : this.type,
                 target : this.target,
             }
 
-            if (this.type === "mousedown") {
-                this.target.draggable = true;
-
-                // run user callback
-                runCallBack("mousedown",params);
+            if (events[this.type]) {
+                events[this.type].call(this);
             }
 
-            if (this.type === "dragstart") {
-                let dt = this.dataTransfer;
+            // run user callback
+            runCallBack(this.type, params);
+
+        }
+
+        Object.keys(events).forEach(function(event){
+            el.addEventListener(event, function func(evt) {
+                eventHandle = func;
+                eventFunc.call(evt);
+            });
+        });
+    }
+
+    let setAppendEvents = function(blocks)
+    {
+        // Block actions
+
+        instance.setEvents(blocks.block,{
+            mouseenter : function()
+            {
+                blocks.block.style.zIndex = "2";
+            },
+            mouseleave : function()
+            {
+                blocks.block.style.zIndex = "";
+            },
+        });
+
+        // Delete actions
+
+        instance.setEvents(blocks.deleteBlock,{
+            click : function()
+            {
+                blocks.block.remove();
+            }
+        });
+
+        // Move actions
+
+        instance.setEvents(blocks.moveBlock,{
+            mousedown : function()
+            {
+               evt.target.draggable = true; 
+            },
+            dragstart : function()
+            {
+                let dt = evt.dataTransfer;
 
                 if (!instance.isIE11) {
                     // removes ghost image on cursor (Firefox/Chrome)
                     dt.setDragImage(new Image(), 0, 0);
 
                     // initiates drag events (Firefox only)
-                    dt.setData('key', '' + key);
+                    dt.setData('key', '');
                 }
 
-                // grab index of current element
-                instance.dragkey = key;
+                instance.dragged = this.target;
 
                 // switch dragging flag to true
                 instance.dragging = true;
-
-                // run user callback
-                runCallBack("dragstart",params);
-            }
-
-            if (this.type === "drag") {
+            },
+            drag : function()
+            {
                 // ...
-
-                // run user callback
-                runCallBack("drag",params);
-            }
-
-            if (this.type === "dragend") {
+            },
+            dragend : function()
+            {
                 this.target.removeAttribute('draggable');
-                instance.dragkey = key;
 
                 // switch dragging flag to false
                 instance.dragging = false;
-
-                // run user callback
-                runCallBack("dragend",params);
             }
-
-            this.target.removeEventListener(this.type, eventHandle);
-            this.target.addEventListener(this.type, eventHandle);
-        }
-
-        // Create event listeners
-
-        this.addEventListener('mousedown', function onMouseDown(evt) {
-            eventHandle = onMouseDown;
-            eventFunc.call(evt);
         });
 
-        this.addEventListener('dragstart', function onDragStart(evt) {
-            eventHandle = onDragStart;
-            eventFunc.call(evt);
-        });
-
-        this.addEventListener('drag', function onDrag(evt) {
-            eventHandle = onDrag;
-            eventFunc.call(evt);
-        });
-
-        this.addEventListener('dragend', function onDragEnd(evt) {
-            eventHandle = onDragEnd;
-            eventFunc.call(evt);
-        });
-    };
-
-    this.setDropEvents = function()
-    {
-        let eventHandle;
-        let eventFunc = function(evt) {
-            let key = getKey(this.target,document.querySelectorAll('*[data-state="drop"]'));
-            let dragged = document.querySelectorAll('*[data-state="drag"]')[instance.dragkey];
-            let params = {
-                self : this,
-                type : this.type,
-                target : this.target,
-            }
-
-            if (this.type === "dragenter" && instance.dragging) {
-                // enables dropzones when dragging
-                if (this.target.dataset.state === 'drop') {
-                    if (this.target !== dragged.parentNode) {
-                        this.preventDefault();
-                        this.target.style.borderStyle = "dashed";
-                        this.target.style.borderColor = "rgba(255,255,255,.8)";
-                    }
-                }
-
-                // run user callback
-                runCallBack("dragenter",params);
-            }
-
-            if (this.type === "dragover" && instance.dragging) {
-                // enables dropzones when dragging
-                if(this.target.dataset.state === 'drop') {
-                    if (this.target !== dragged.parentNode) {
-                        this.preventDefault();
-                    }
-                }
-
-                // run user callback
-                runCallBack("dragover",params);
-            }
-
-            if (this.type === "dragleave") {
-                if (this.target !== dragged.parentNode
-                    && this.target.dataset.state === 'drop') {
-                    this.target.style.borderStyle = "";
-                    this.target.style.borderColor = "";
-                }
-
-                // run user callback
-                runCallBack("dragleave",params);
-            }
-
-            if (this.type === "drop"
-                && !this.target.dataset.append) {
-                if (this.target !== dragged.parentNode) {
-                    dragged.removeAttribute('draggable');
-                    let clone = dragged.cloneNode(true);
-                    dragging = false;
-
-                    switch(dragged.dataset.method) {
-                        case 'move':
-                            this.target.appendChild(dragged);
-                            break;
-
-                        case 'copy':
-                            appendNode(clone,this.target.querySelector('.email-container'));
-                            break;
-                    }
-
-                    this.target.style.borderStyle = "";
-                    this.target.style.background = "";
-
-                    // switch dragging flag to true
-                    instance.dragging = true;
-
-                    // run user callback
-                    runCallBack("drop",params);
-                }
-            }
-
-            this.target.removeEventListener(this.type, eventHandle);
-            this.target.addEventListener(this.type, eventHandle);
-        }
-
-        // Create event listeners
-
-        this.addEventListener('dragenter', function onDragEnter(evt) {
-            eventHandle = onDragEnter;
-            eventFunc.call(evt);
-        });
-
-        this.addEventListener('dragover', function onDragOver(evt) {
-            eventHandle = onDragOver;
-            eventFunc.call(evt);
-        });
-
-        this.addEventListener('dragleave', function onDragLeave(evt) {
-            eventHandle = onDragLeave;
-            eventFunc.call(evt);
-        });
-
-        this.addEventListener('drop', function onDrop(evt) {
-            eventHandle = onDrop;
-            eventFunc.call(evt);
-        });
-    }
-
-    let setAppendEvents = function(blocks)
-    {
-        blocks.block.addEventListener('mouseenter', function(evt) {
-            blocks.block.style.zIndex = "2";
-        });
-
-        blocks.block.addEventListener('mouseleave', function(evt) {
-            blocks.block.style.zIndex = "";
-        });
-
-        blocks.deleteBlock.addEventListener('click', function(evt) {
-            blocks.block.remove();
-        });
+        // Append actions
 
         [blocks.dropBefore,blocks.dropAfter].forEach(function(el){
-            let eventHandle;
-            let eventFunc = function(evt) 
-            {
-
-                if (this.type === "dragenter") {
+            instance.setEvents(el,{
+                dragenter : function()
+                {
                     if (instance.dragging) {
                         this.preventDefault();
-                        this.target.style.background = "red";
+                        this.target.style.background = "rgba(75,75,200,.8)";
                     }
-                }
-
-                if (this.type === "dragover") {
+                },
+                dragover : function()
+                {
                     if (instance.dragging) {
                         this.preventDefault();
                     }
-                }
-
-                if (this.type === "dragleave") {
+                },
+                dragleave : function()
+                {
                     if (instance.dragging) {
                         this.target.style.background = "";
                     }
-                }
-
-                if (this.type === "drop") {
+                },
+                drop : function()
+                {
                     if (instance.dragging) {
                         this.target.style.background = "";
                         
                         if (this.target.dataset.append) {
-                            let dragged = document.querySelectorAll('*[data-state="drag"]')[instance.dragkey];
-                            dragged.removeAttribute('draggable');
-                            let clone = dragged.cloneNode(true);
+                            instance.dragged.removeAttribute('draggable');
+                            let clone = instance.dragged.cloneNode(true);
                             dragging = false;
 
                             if (this.target.dataset.append === "before") {
@@ -308,29 +280,6 @@ let DragDrop = function(o) {
                         }
                     }
                 }
-
-                this.target.removeEventListener(this.type, eventHandle);
-                this.target.addEventListener(this.type, eventHandle);
-            }
-
-            el.addEventListener('dragenter', function onDragEnter(evt) {
-                eventHandle = onDragEnter;
-                eventFunc.call(evt);
-            });
-
-            el.addEventListener('dragover', function onDragOver(evt) {
-                eventHandle = onDragOver;
-                eventFunc.call(evt);
-            });
-
-            el.addEventListener('dragleave', function onDragLeave(evt) {
-                eventHandle = onDragLeave;
-                eventFunc.call(evt);
-            });
-
-            el.addEventListener('drop', function onDrop(evt) {
-                eventHandle = onDrop;
-                eventFunc.call(evt);
             });
         });
     }
@@ -343,23 +292,28 @@ let DragDrop = function(o) {
         let block = document.createElement('div');
         let dropBefore = document.createElement('div');
         let dropAfter = document.createElement('div');
+        let blockControls = document.createElement('div');
         let deleteBlock = document.createElement('div');
         let moveBlock = document.createElement('div');
+        let editBlock = document.createElement('div');
 
         // assign classes + data attributes
         block.classList.add('block');
         dropBefore.dataset.append = "before";
         dropAfter.dataset.append = "after";
+        blockControls.classList.add('block-controls');
         deleteBlock.dataset.blockaction = "delete";
         moveBlock.dataset.blockaction = "move";
+        editBlock.dataset.blockaction = "edit";
 
         // set control events
         setAppendEvents({
             block:block,
             deleteBlock:deleteBlock,
+            moveBlock:moveBlock,
+            editBlock:editBlock,
             dropAfter:dropAfter,
             dropBefore:dropBefore,
-            moveBlock:moveBlock,
         });
         
         // remove drag attributes
@@ -368,7 +322,10 @@ let DragDrop = function(o) {
 
         // append to dropzone
         block.appendChild(dropBefore);
-        block.appendChild(deleteBlock);
+        blockControls.appendChild(moveBlock);
+        blockControls.appendChild(editBlock);
+        blockControls.appendChild(deleteBlock);
+        block.appendChild(blockControls);
         block.appendChild(clone);
         block.appendChild(dropAfter);
 
