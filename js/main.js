@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function(evt) {
 	let dragdrop = new DragDrop({
 		drop : function(params) 
 		{
-			if (params.target.classList) {
-				params.target.classList.remove("initial-block");
+			if (document.querySelector('.initial-block')) {
+				document.querySelector('.initial-block').classList.remove('initial-block');
 			}
 
 			// Make all text editable

@@ -22,29 +22,40 @@ h2 {
     padding: 0 2em; }
   .center-content main#app {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
     justify-content: space-between;
     overflow: hidden; }
     .center-content main#app > * {
-      flex: 0 1 49%; }
+      flex: 0 1 50%; }
+    .center-content main#app .initial-block:before {
+      content: 'Drag Blocks Here To Start';
+      color: #787878;
+      font-size: 2em;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0; }
     .center-content main#app #displayarea {
-      padding: 10px;
       margin: 0 auto;
       overflow: scroll;
-      max-height: 100%; }
+      max-height: 100%;
+      position: relative;
+      padding: 15px;
+      background-color: #222222; }
+      .center-content main#app #displayarea > * {
+        min-height: 100%; }
+      .center-content main#app #displayarea > * > center {
+        min-height: 100%; }
       .center-content main#app #displayarea *[data-state="drop"] {
-        min-height: 215px;
         color: #fff;
-        position: relative;
-        padding-top: 15px;
-        padding-bottom: 15px; }
+        position: relative; }
         .center-content main#app #displayarea *[data-state="drop"] *[data-state="drag"] {
           margin-bottom: 0; }
-      .center-content main#app #displayarea .initial-block:before {
-        content: 'Drag Blocks Here To Start';
-        color: #787878;
-        font-size: 2em;
-        font-family: sans-serif; }
       .center-content main#app #displayarea .block {
         position: relative; }
         .center-content main#app #displayarea .block:hover {
@@ -79,7 +90,7 @@ h2 {
           .center-content main#app #displayarea .block div[data-blockaction="move"]:hover {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-blockaction="move"]:before {
-            content: 'move'; }
+            content: attr(data-blockaction); }
         .center-content main#app #displayarea .block div[data-blockaction="edit"] {
           display: inline-block;
           text-align: center;
@@ -91,7 +102,7 @@ h2 {
           .center-content main#app #displayarea .block div[data-blockaction="edit"]:hover {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-blockaction="edit"]:before {
-            content: 'edit'; }
+            content: attr(data-blockaction); }
         .center-content main#app #displayarea .block div[data-blockaction="delete"] {
           display: inline-block;
           text-align: center;
@@ -103,7 +114,7 @@ h2 {
           .center-content main#app #displayarea .block div[data-blockaction="delete"]:hover {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-blockaction="delete"]:before {
-            content: 'close'; }
+            content: attr(data-blockaction); }
     .center-content main#app #workspace {
       max-height: 100%;
       overflow: scroll; }

@@ -33,41 +33,56 @@ h2 {
     main#app
     {
         display: flex;
-        flex-flow: row wrap;
+        flex-flow: row;
         justify-content: space-between;
         overflow: hidden;
 
         & > * {
-            flex: 0 1 49%;
+            flex: 0 1 50%;
+        }
+
+        .initial-block
+        {
+            &:before {
+                content: 'Drag Blocks Here To Start';
+                color: rgba(120, 120, 120, 1);
+                font-size: 2em;
+                font-family: sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
         }
 
         #displayarea
         {
-            padding: 10px;
             margin: 0 auto;
             overflow: scroll;
             max-height: 100%;
+            position: relative;
+            padding: 15px;
+            background-color: #222222;
+            
+            & > * {
+                min-height: 100%;
+            }
+
+            & > * > center {
+                min-height: 100%;
+            }
 
             *[data-state="drop"]
             {
-                min-height: 215px;
                 color: #fff;
                 position: relative;
-                padding-top: 15px;
-                padding-bottom: 15px;
 
                 *[data-state="drag"] {
                     margin-bottom: 0;
-                }
-            }
-
-            .initial-block
-            {
-                &:before {
-                    content: 'Drag Blocks Here To Start';
-                    color: rgba(120, 120, 120, 1);
-                    font-size: 2em;
-                    font-family: sans-serif;
                 }
             }
 
@@ -123,33 +138,25 @@ h2 {
                         // outline-width: 2px;
                         // transform: scale(1.3);
                     }
+
+                    &:before {
+                        content: attr(data-blockaction);
+                    }
                 }
 
                 div[data-blockaction="move"]
                 {
                     @include blockControls();
-
-                    &:before {
-                        content: 'move';
-                    }
                 }
 
                 div[data-blockaction="edit"]
                 {
                     @include blockControls();
-
-                    &:before {
-                        content: 'edit';
-                    }
                 }
 
                 div[data-blockaction="delete"]
                 {
                     @include blockControls();
-
-                    &:before {
-                        content: 'close';
-                    }
                 }
             }
         }
