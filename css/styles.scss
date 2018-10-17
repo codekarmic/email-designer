@@ -82,6 +82,10 @@ h2 {
                 color: #fff;
                 position: relative;
 
+                &.highlight {
+                    outline: 4px dashed rgba(100,100,100,.8);
+                }
+
                 *[data-state="drag"] {
                     margin-bottom: 0;
                 }
@@ -96,12 +100,12 @@ h2 {
                     cursor: pointer;
                     outline: 3px solid rgba(75,75,200,.8);
 
-                    & div.block-controls {
+                    & .block-controls {
                         display: inline-block;
                     }
                 }
 
-                div[data-append="before"]
+                *[data-append="before"]
                 {
                     height: 10px;
                     width: 100%;
@@ -109,12 +113,16 @@ h2 {
                     top: 0;
                 }
 
-                div[data-append="after"]
+                *[data-append="after"]
                 {
                     height: 10px;
                     width: 100%;
                     position: absolute;
                     bottom: 0;
+                }
+
+                *[data-append].highlight {
+                    background: rgba(75,75,200,.8);
                 }
 
                 .block-controls {

@@ -55,6 +55,8 @@ h2 {
       .center-content main#app #displayarea *[data-state="drop"] {
         color: #fff;
         position: relative; }
+        .center-content main#app #displayarea *[data-state="drop"].highlight {
+          outline: 4px dashed rgba(100, 100, 100, 0.8); }
         .center-content main#app #displayarea *[data-state="drop"] *[data-state="drag"] {
           margin-bottom: 0; }
       .center-content main#app #displayarea .block {
@@ -62,18 +64,20 @@ h2 {
         .center-content main#app #displayarea .block:hover {
           cursor: pointer;
           outline: 3px solid rgba(75, 75, 200, 0.8); }
-          .center-content main#app #displayarea .block:hover div.block-controls {
+          .center-content main#app #displayarea .block:hover .block-controls {
             display: inline-block; }
-        .center-content main#app #displayarea .block div[data-append="before"] {
+        .center-content main#app #displayarea .block *[data-append="before"] {
           height: 10px;
           width: 100%;
           position: absolute;
           top: 0; }
-        .center-content main#app #displayarea .block div[data-append="after"] {
+        .center-content main#app #displayarea .block *[data-append="after"] {
           height: 10px;
           width: 100%;
           position: absolute;
           bottom: 0; }
+        .center-content main#app #displayarea .block *[data-append].highlight {
+          background: rgba(75, 75, 200, 0.8); }
         .center-content main#app #displayarea .block .block-controls {
           display: none;
           background: rgba(0, 0, 0, 0.9);

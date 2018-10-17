@@ -21,6 +21,11 @@ document.addEventListener('DOMContentLoaded', function(evt) {
 
                 // switch dragging flag to true
                 dragdrop.dragging = true;
+
+                // show dropzones
+                document.querySelectorAll('*[data-state="drop"],*[data-append]').forEach(function(dropzone) {
+					dropzone.classList.add('highlight');
+                });
             },
             dragend : function()
             {
@@ -28,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function(evt) {
 
                 // switch dragging flag to false
                 dragdrop.dragging = false;
+
+                // hide dropzones
+                document.querySelectorAll('*[data-state="drop"],*[data-append]').forEach(function(dropzone) {
+					dropzone.classList.remove('highlight');
+                });
             },
             mousedown : function()
             {
@@ -44,8 +54,6 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                 if (this.target.dataset.state === 'drop') {
                     if (this.target !== dragdrop.dragged.parentNode) {
                         this.preventDefault();
-                        this.target.style.outlineStyle = "dashed";
-                        this.target.style.outlineColor = "rgba(100,100,100,.8)";
                     }
                 }
             },
@@ -62,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function(evt) {
             {
                 if (this.target !== dragdrop.dragged.parentNode
                     && this.target.dataset.state === 'drop') {
-                    this.target.style.outlineStyle = "";
-                    this.target.style.outlineColor = "";
                 }
             },
             drop : function()
@@ -77,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                     switch(dragdrop.dragged.dataset.method) {
                         case 'move':
                             this.target.appendChild(dragdrop.dragged);
-                            console.log('moved');
                             break;
 
                         case 'copy':
@@ -95,6 +100,11 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                     if (document.querySelector('.initial-block')) {
 						document.querySelector('.initial-block').classList.remove('initial-block');
 					}
+
+					// hide dropzones
+		            document.querySelectorAll('*[data-state="drop"],*[data-append]').forEach(function(dropzone) {
+						dropzone.classList.remove('highlight');
+		            });
 
 					// Make all text editable
 					// params.target.querySelectorAll('tr').forEach(function(el) {

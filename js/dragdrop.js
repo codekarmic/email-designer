@@ -91,6 +91,11 @@ let DragDrop = function() {
 
                 // switch dragging flag to true
                 instance.dragging = true;
+
+                // show dropzones
+                document.querySelectorAll('*[data-append]').forEach(function(dropzone){
+                    dropzone.style.background = "rgba(75,75,200,.8)";
+                });
             },
             dragend : function()
             {
@@ -99,6 +104,11 @@ let DragDrop = function() {
 
                 // switch dragging flag to false
                 instance.dragging = false;
+
+                // hide dropzones
+                document.querySelectorAll('*[data-append]').forEach(function(dropzone){
+                    dropzone.style.background = "";
+                });
             }
         });
 
@@ -111,7 +121,6 @@ let DragDrop = function() {
                     if (instance.dragging
                         && instance.dragged !== components.block) {
                         this.preventDefault();
-                        this.target.style.background = "rgba(75,75,200,.8)";
                     }
                 },
                 dragover : function()
@@ -125,7 +134,6 @@ let DragDrop = function() {
                 {
                     if (instance.dragging
                         && instance.dragged !== components.block) {
-                        this.target.style.background = "";
                     }
                 },
                 drop : function()
@@ -155,6 +163,11 @@ let DragDrop = function() {
                                 }
                             break;
                         }
+
+                        // hide dropzones
+                        document.querySelectorAll('*[data-append]').forEach(function(dropzone){
+                            dropzone.style.background = "";
+                        });
                     }
                 }
             });
