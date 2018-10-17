@@ -70,6 +70,7 @@ h2 {
             
             & > * {
                 min-height: 100%;
+                height: 0; // force 100% height on child elements
             }
 
             & > * > center {
@@ -140,21 +141,21 @@ h2 {
                     }
 
                     &:before {
-                        content: attr(data-blockaction);
+                        content: attr(data-method);
                     }
                 }
 
-                div[data-blockaction="move"]
+                div[data-method="move"]
                 {
                     @include blockControls();
                 }
 
-                div[data-blockaction="edit"]
+                div[data-method="edit"]
                 {
                     @include blockControls();
                 }
 
-                div[data-blockaction="delete"]
+                div[data-method="delete"]
                 {
                     @include blockControls();
                 }

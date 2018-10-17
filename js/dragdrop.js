@@ -9,146 +9,13 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   };
 }
 
-let DragDrop = function(o) {
+let DragDrop = function() {
     let instance = this;
     this.draggables = document.querySelectorAll('*[data-state="drag"]');
     this.dropzones = document.querySelectorAll('*[data-state="drop"]');
     this.isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
     this.dragging;
     this.dragged;
-    this.opts = o;
-    this.settings = {
-        dragstart      : function(){},
-        dragenter      : function(){},
-        drag           : function(){},
-        dragover       : function(){},
-        dragleave      : function(){},
-        dragend        : function(){},
-        drop           : function(){},
-        touchstart     : function(){},
-        touchmove      : function(){},
-        touchhover     : function(){},
-        touchend       : function(){},
-        mousedown      : function(){},
-    };
-
-
-    // Public
-
-    this.init = function() 
-    {
-        // set options
-        instance.setOpts(instance.opts).call(instance);
-
-        // set drag events on draggables
-        Object.keys(instance.draggables).forEach(function(key) {
-            instance.setEvents(instance.draggables[key],{
-                dragstart : function()
-                {
-                    let dt = this.dataTransfer;
-
-                    if (!instance.isIE11) {
-                        // removes ghost image on cursor (Firefox/Chrome)
-                        dt.setDragImage(new Image(), 0, 0);
-
-                        // initiates drag events (Firefox only)
-                        dt.setData('key', '');
-                    }
-
-                    // set handle for dragged element
-                    instance.dragged = this.target;
-
-                    // switch dragging flag to true
-                    instance.dragging = true;
-                },
-                drag : function()
-                {
-
-                },
-                dragend : function()
-                {
-                    this.target.removeAttribute('draggable');
-
-                    // switch dragging flag to false
-                    instance.dragging = false;
-                },
-                mousedown : function()
-                {
-                    this.target.draggable = true;
-                },
-            });
-        });
-
-        // set drop events on drop zones
-        Object.keys(instance.dropzones).forEach(function(key) {
-            instance.setEvents(instance.dropzones[key],{
-                dragenter : function() {
-                    // enables dropzones when dragging
-                    if (this.target.dataset.state === 'drop') {
-                        if (this.target !== instance.dragged.parentNode) {
-                            this.preventDefault();
-                            this.target.style.outlineStyle = "dashed";
-                            this.target.style.outlineColor = "rgba(100,100,100,.8)";
-                        }
-                    }
-                },
-                dragover : function()
-                {
-                    // enables dropzones when dragging
-                    if(this.target.dataset.state === 'drop') {
-                        if (this.target !== instance.dragged.parentNode) {
-                            this.preventDefault();
-                        }
-                    }
-                },
-                dragleave : function()
-                {
-                    if (this.target !== instance.dragged.parentNode
-                        && this.target.dataset.state === 'drop') {
-                        this.target.style.outlineStyle = "";
-                        this.target.style.outlineColor = "";
-                    }
-                },
-                drop : function()
-                {
-                    if (this.target !== instance.dragged.parentNode
-                        && !this.target.dataset.append) {
-                        instance.dragged.removeAttribute('draggable');
-                        let clone = instance.dragged.cloneNode(true);
-                        dragging = false;
-
-                        switch(instance.dragged.dataset.method) {
-                            case 'move':
-                                this.target.appendChild(instance.dragged);
-                                break;
-
-                            case 'copy':
-                                appendNode(clone,this.target.querySelector('.email-container'));
-                                break;
-                        }
-
-                        this.target.style.outlineStyle = "";
-                        this.target.style.background = "";
-
-                        // switch dragging flag to true
-                        instance.dragging = true;
-                    }
-                },
-            });
-        });
-    };
-
-    this.setOpts = function func(o)
-    {
-        let opts = (o) ? o : this.settings;
-
-        // set user options
-        Object.keys(opts).forEach(function(key) {
-            (opts[key] !== null) ? instance.settings[key] = opts[key] : ''; 
-        });
-
-        return func;
-    };
 
     this.setEvents = function(el,events)
     {
@@ -165,9 +32,6 @@ let DragDrop = function(o) {
                 events[this.type].call(this);
             }
 
-            // run user callback
-            runCallBack(this.type, params);
-
         }
 
         Object.keys(events).forEach(function(event){
@@ -178,40 +42,41 @@ let DragDrop = function(o) {
         });
     }
 
-    let setAppendEvents = function(blocks)
+    this.setAppendEvents = function(components)
     {
         // Block actions
 
-        instance.setEvents(blocks.block,{
+        instance.setEvents(components.block,{
             mouseenter : function()
             {
-                blocks.block.style.zIndex = "2";
+                components.block.style.zIndex = "2";
             },
             mouseleave : function()
             {
-                blocks.block.style.zIndex = "";
+                components.block.style.zIndex = "";
             },
         });
 
         // Delete actions
 
-        instance.setEvents(blocks.deleteBlock,{
+        instance.setEvents(components.deleteBlock,{
             click : function()
             {
-                blocks.block.remove();
+                components.block.remove();
             }
         });
 
         // Move actions
 
-        instance.setEvents(blocks.moveBlock,{
+        instance.setEvents(components.moveBlock, {
             mousedown : function()
             {
-               evt.target.draggable = true; 
+               components.moveBlock.draggable = true;
+               components.block.dataset.method = "move";
             },
             dragstart : function()
             {
-                let dt = evt.dataTransfer;
+                let dt = this.dataTransfer;
 
                 if (!instance.isIE11) {
                     // removes ghost image on cursor (Firefox/Chrome)
@@ -221,18 +86,16 @@ let DragDrop = function(o) {
                     dt.setData('key', '');
                 }
 
-                instance.dragged = this.target;
+                // set handle for dragged element
+                instance.dragged = components.block;
 
                 // switch dragging flag to true
                 instance.dragging = true;
             },
-            drag : function()
-            {
-                // ...
-            },
             dragend : function()
             {
-                this.target.removeAttribute('draggable');
+                components.moveBlock.removeAttribute('draggable');
+                components.block.removeAttribute('data-method');
 
                 // switch dragging flag to false
                 instance.dragging = false;
@@ -241,42 +104,56 @@ let DragDrop = function(o) {
 
         // Append actions
 
-        [blocks.dropBefore,blocks.dropAfter].forEach(function(el){
+        [components.dropBefore,components.dropAfter].forEach(function(el){
             instance.setEvents(el,{
                 dragenter : function()
                 {
-                    if (instance.dragging) {
+                    if (instance.dragging
+                        && instance.dragged !== components.block) {
                         this.preventDefault();
                         this.target.style.background = "rgba(75,75,200,.8)";
                     }
                 },
                 dragover : function()
                 {
-                    if (instance.dragging) {
+                    if (instance.dragging
+                        && instance.dragged !== components.block) {
                         this.preventDefault();
                     }
                 },
                 dragleave : function()
                 {
-                    if (instance.dragging) {
+                    if (instance.dragging
+                        && instance.dragged !== components.block) {
                         this.target.style.background = "";
                     }
                 },
                 drop : function()
                 {
-                    if (instance.dragging) {
+                    if (instance.dragging
+                        && instance.dragged !== components.block) {
                         this.target.style.background = "";
                         
-                        if (this.target.dataset.append) {
-                            instance.dragged.removeAttribute('draggable');
-                            let clone = instance.dragged.cloneNode(true);
-                            dragging = false;
+                        switch (instance.dragged.dataset.method) {
+                            case "move":
+                                if (this.target.dataset.append === "before") {
+                                    instance.moveDrag(instance.dragged,document.querySelector('.email-container'),"before",components.block);
+                                } else {
+                                    instance.moveDrag(instance.dragged,document.querySelector('.email-container'),"after",components.block);
+                                }
+                            break;
 
-                            if (this.target.dataset.append === "before") {
-                                appendNode(clone,document.querySelector('.email-container'),"before",blocks.block);
-                            } else {
-                                appendNode(clone,document.querySelector('.email-container'),"after",blocks.block);
-                            }
+                            case "copy":
+                                instance.dragged.removeAttribute('draggable');
+                                let clone = instance.dragged.cloneNode(true);
+                                dragging = false;
+
+                                if (this.target.dataset.append === "before") {
+                                    instance.copyDrag(clone,document.querySelector('.email-container'),"before",components.block);
+                                } else {
+                                    instance.copyDrag(clone,document.querySelector('.email-container'),"after",components.block);
+                                }
+                            break;
                         }
                     }
                 }
@@ -284,9 +161,7 @@ let DragDrop = function(o) {
         });
     }
 
-    // Private
-
-    let appendNode = function(clone,dropzone,placement,sibling)
+    this.copyDrag = function(clone,container,placement,sibling)
     {
         // create wrapper div + controls
         let block = document.createElement('div');
@@ -302,12 +177,12 @@ let DragDrop = function(o) {
         dropBefore.dataset.append = "before";
         dropAfter.dataset.append = "after";
         blockControls.classList.add('block-controls');
-        deleteBlock.dataset.blockaction = "delete";
-        moveBlock.dataset.blockaction = "move";
-        editBlock.dataset.blockaction = "edit";
+        deleteBlock.dataset.method = "delete";
+        moveBlock.dataset.method = "move";
+        editBlock.dataset.method = "edit";
 
         // set control events
-        setAppendEvents({
+        instance.setAppendEvents({
             block:block,
             deleteBlock:deleteBlock,
             moveBlock:moveBlock,
@@ -320,7 +195,7 @@ let DragDrop = function(o) {
         clone.removeAttribute('data-state');
         clone.removeAttribute('data-method');
 
-        // append to dropzone
+        // build block structure
         block.appendChild(dropBefore);
         blockControls.appendChild(moveBlock);
         blockControls.appendChild(editBlock);
@@ -331,20 +206,45 @@ let DragDrop = function(o) {
 
         switch (placement) {
             case 'before':
-                dropzone.insertBefore(block,sibling);
-                break;
+                container.insertBefore(block,sibling);
+            break;
+
             case 'after':
                 if(sibling.nextElementSibling) {
-                    dropzone.insertBefore(block,sibling.nextElementSibling);
+                    container.insertBefore(block,sibling.nextElementSibling);
                 } else {
-                    dropzone.appendChild(block);
+                    container.appendChild(block);
                 }
-                break;
+            break;
+
             default:
-                dropzone.appendChild(block);
-                break;
+                container.appendChild(block);
+            break;
         }
     }
+
+    this.moveDrag = function(block,container,placement,sibling)
+    {
+        switch (placement) {
+            case 'before':
+                container.insertBefore(block,sibling);
+            break;
+
+            case 'after':
+                if(sibling.nextElementSibling) {
+                    container.insertBefore(block,sibling.nextElementSibling);
+                } else {
+                    container.appendChild(block);
+                }
+            break;
+
+            default:
+                container.appendChild(block);
+            break;
+        }
+    }
+
+    // Private
 
     let getKey = function(el,collection)
     {
@@ -357,16 +257,5 @@ let DragDrop = function(o) {
         });
 
         return key;
-    }
-
-    let runCallBack = function func(callback,params)
-    {
-        // user defined callback
-        if( instance.settings[callback] 
-            && typeof instance.settings[callback] === "function") {
-            instance.settings[callback](params);
-        }
-
-        return func;
     }
 }

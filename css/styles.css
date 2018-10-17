@@ -48,7 +48,8 @@ h2 {
       padding: 15px;
       background-color: #222222; }
       .center-content main#app #displayarea > * {
-        min-height: 100%; }
+        min-height: 100%;
+        height: 0; }
       .center-content main#app #displayarea > * > center {
         min-height: 100%; }
       .center-content main#app #displayarea *[data-state="drop"] {
@@ -79,7 +80,7 @@ h2 {
           border-radius: 15px;
           position: absolute;
           transform: translateY(-50%); }
-        .center-content main#app #displayarea .block div[data-blockaction="move"] {
+        .center-content main#app #displayarea .block div[data-method="move"] {
           display: inline-block;
           text-align: center;
           padding: 15px;
@@ -87,11 +88,11 @@ h2 {
           transform: scale(1);
           transition: 0.2s all;
           z-index: 2; }
-          .center-content main#app #displayarea .block div[data-blockaction="move"]:hover {
+          .center-content main#app #displayarea .block div[data-method="move"]:hover {
             cursor: pointer; }
-          .center-content main#app #displayarea .block div[data-blockaction="move"]:before {
-            content: attr(data-blockaction); }
-        .center-content main#app #displayarea .block div[data-blockaction="edit"] {
+          .center-content main#app #displayarea .block div[data-method="move"]:before {
+            content: attr(data-method); }
+        .center-content main#app #displayarea .block div[data-method="edit"] {
           display: inline-block;
           text-align: center;
           padding: 15px;
@@ -99,11 +100,11 @@ h2 {
           transform: scale(1);
           transition: 0.2s all;
           z-index: 2; }
-          .center-content main#app #displayarea .block div[data-blockaction="edit"]:hover {
+          .center-content main#app #displayarea .block div[data-method="edit"]:hover {
             cursor: pointer; }
-          .center-content main#app #displayarea .block div[data-blockaction="edit"]:before {
-            content: attr(data-blockaction); }
-        .center-content main#app #displayarea .block div[data-blockaction="delete"] {
+          .center-content main#app #displayarea .block div[data-method="edit"]:before {
+            content: attr(data-method); }
+        .center-content main#app #displayarea .block div[data-method="delete"] {
           display: inline-block;
           text-align: center;
           padding: 15px;
@@ -111,10 +112,10 @@ h2 {
           transform: scale(1);
           transition: 0.2s all;
           z-index: 2; }
-          .center-content main#app #displayarea .block div[data-blockaction="delete"]:hover {
+          .center-content main#app #displayarea .block div[data-method="delete"]:hover {
             cursor: pointer; }
-          .center-content main#app #displayarea .block div[data-blockaction="delete"]:before {
-            content: attr(data-blockaction); }
+          .center-content main#app #displayarea .block div[data-method="delete"]:before {
+            content: attr(data-method); }
     .center-content main#app #workspace {
       max-height: 100%;
       overflow: scroll; }
