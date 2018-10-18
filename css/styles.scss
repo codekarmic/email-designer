@@ -73,6 +73,7 @@ h2 {
         #displayarea
         {
             position: relative;
+            background-color: #222222;
 
             .inner {
                 margin: 0 auto;
@@ -111,7 +112,6 @@ h2 {
 
                 &:hover 
                 {
-                    cursor: pointer;
                     outline: 3px solid rgba(75,75,200,.8);
 
                     & .block-controls {
@@ -170,25 +170,31 @@ h2 {
                 div[data-method="move"]
                 {
                     @include blockControls();
+                    
+                    &:hover {
+                        cursor: move;
+                    }
                 }
 
                 div[data-method="edit"]
                 {
                     @include blockControls();
+                    &:hover {
+                        cursor: text;
+                    }
                 }
 
                 div[data-method="delete"]
                 {
                     @include blockControls();
+                    &:hover {
+                        cursor: no-drop;
+                    }
                 }
             }
 
             &.mobile {
                 min-width: 350px !important;
-
-                .inner {
-                    padding: 0;
-                }
 
                 .email-container {
                     width: 100% !important;
@@ -237,10 +243,12 @@ h2 {
 
         #workspace
         {
-            -ms-user-select: none;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -user-select:none;
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
 
             .inner {
                max-height: 100%;
@@ -248,7 +256,7 @@ h2 {
             }
         
             *[data-state="drag"] {
-                cursor: pointer;
+                cursor: move;
                 display: inline-block;
                 font-family: sans-serif;
                 margin-bottom: 15px;
@@ -262,15 +270,6 @@ h2 {
                     box-shadow: 0 0 50px rbga(0,0,0,0.9);
                 }
             }
-        }
-          
-        *[data-state="drag"] {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
         }
     }
 }

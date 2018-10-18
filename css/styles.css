@@ -50,7 +50,8 @@ h2 {
       transform: translateX(50%);
       z-index: 2; }
     .center-content main#app #displayarea {
-      position: relative; }
+      position: relative;
+      background-color: #222222; }
       .center-content main#app #displayarea .inner {
         margin: 0 auto;
         overflow: scroll;
@@ -74,7 +75,6 @@ h2 {
       .center-content main#app #displayarea .block {
         position: relative; }
         .center-content main#app #displayarea .block:hover {
-          cursor: pointer;
           outline: 3px solid rgba(75, 75, 200, 0.8); }
           .center-content main#app #displayarea .block:hover .block-controls {
             display: inline-block; }
@@ -108,6 +108,8 @@ h2 {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-method="move"]:before {
             content: attr(data-method); }
+          .center-content main#app #displayarea .block div[data-method="move"]:hover {
+            cursor: move; }
         .center-content main#app #displayarea .block div[data-method="edit"] {
           display: inline-block;
           text-align: center;
@@ -120,6 +122,8 @@ h2 {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-method="edit"]:before {
             content: attr(data-method); }
+          .center-content main#app #displayarea .block div[data-method="edit"]:hover {
+            cursor: text; }
         .center-content main#app #displayarea .block div[data-method="delete"] {
           display: inline-block;
           text-align: center;
@@ -132,6 +136,8 @@ h2 {
             cursor: pointer; }
           .center-content main#app #displayarea .block div[data-method="delete"]:before {
             content: attr(data-method); }
+          .center-content main#app #displayarea .block div[data-method="delete"]:hover {
+            cursor: no-drop; }
       .center-content main#app #displayarea.mobile {
         min-width: 350px !important;
         /* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
@@ -139,8 +145,6 @@ h2 {
         /* And center justify these ones. */
         /* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
         /* What it does: Adjust typography on small screens to improve readability */ }
-        .center-content main#app #displayarea.mobile .inner {
-          padding: 0; }
         .center-content main#app #displayarea.mobile .email-container {
           width: 100% !important;
           margin: auto !important; }
@@ -168,24 +172,6 @@ h2 {
         .center-content main#app #displayarea.mobile .email-container p {
           font-size: 17px !important; }
     .center-content main#app #workspace {
-      -ms-user-select: none;
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -user-select: none; }
-      .center-content main#app #workspace .inner {
-        max-height: 100%;
-        overflow: scroll; }
-      .center-content main#app #workspace *[data-state="drag"] {
-        cursor: pointer;
-        display: inline-block;
-        font-family: sans-serif;
-        margin-bottom: 15px;
-        transition: 0.2s all; }
-        .center-content main#app #workspace *[data-state="drag"] * {
-          pointer-events: none; }
-        .center-content main#app #workspace *[data-state="drag"]:hover {
-          box-shadow: 0 0 50px rbga(0, 0, 0, 0.9); }
-    .center-content main#app *[data-state="drag"] {
       -webkit-touch-callout: none;
       /* iOS Safari */
       -webkit-user-select: none;
@@ -197,6 +183,19 @@ h2 {
       -ms-user-select: none;
       /* Internet Explorer/Edge */
       user-select: none; }
+      .center-content main#app #workspace .inner {
+        max-height: 100%;
+        overflow: scroll; }
+      .center-content main#app #workspace *[data-state="drag"] {
+        cursor: move;
+        display: inline-block;
+        font-family: sans-serif;
+        margin-bottom: 15px;
+        transition: 0.2s all; }
+        .center-content main#app #workspace *[data-state="drag"] * {
+          pointer-events: none; }
+        .center-content main#app #workspace *[data-state="drag"]:hover {
+          box-shadow: 0 0 50px rbga(0, 0, 0, 0.9); }
 
 /* Cerberus Styles */
 #displayarea {
