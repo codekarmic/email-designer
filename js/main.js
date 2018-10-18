@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                     devents.dragging = true;
 
                     // Remove initial instructions
-                    if (document.querySelector('.initial-block')) {
-						document.querySelector('.initial-block').classList.remove('initial-block');
+                    if (document.querySelector('.initial-display')) {
+						document.querySelector('.initial-display').classList.remove('initial-display');
 					}
 
 					// hide dropzones
@@ -121,14 +121,42 @@ document.addEventListener('DOMContentLoaded', function(evt) {
     {
     	devents.setEvents(el,
     	{
-    		pointerdown : function()
+    		mousedown : function()
     		{
-    			console.log(this);
+    			devents.mouseDown = 1;
+    			devents.xPos = this.clientX;
+    			devents.resized = this.target;
     		},
-    		pointermove : function()
+    		mousemove : function()
     		{
-    			console.log(this);
+    			this.target.style.cursor = "e-resize";
     		}
     	});
+    });
+
+    // document resize listener
+
+    devents.setEvents(document,
+    {
+		mousemove : function()
+		{
+			if (devents.resized && devents.mouseDown) {
+				devents.resized.parentNode.style.flex = "0 1 " + this.clientX + "px";
+			}
+
+			if (devents.resized && devents.resized.parentNode.offsetWidth < 650) 
+			{
+				document.querySelector('#displayarea').classList.add('mobile');
+
+			} else if(devents.resized && devents.resized.parentNode.offsetWidth >= 650) 
+			{
+				document.querySelector('#displayarea').classList.remove('mobile');
+			}
+		},
+		mouseup : function()
+		{
+			devents.mouseDown = 0;
+			devents.resized = undefined;
+		}
     });
 });
