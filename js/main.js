@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function(evt) {
             mousedown : function()
             {
                 this.target.draggable = true;
+                console.log(this.target);
             },
         });
     });
