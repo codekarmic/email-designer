@@ -38,10 +38,10 @@ h2 {
         overflow: hidden;
 
         & > * {
-            flex: 0 1 50%;
+            flex: 1 1 50%;
         }
 
-        .initial-block
+        .initial-display
         {
             &:before {
                 content: 'Drag Blocks Here To Start';
@@ -61,12 +61,28 @@ h2 {
 
         #displayarea
         {
-            margin: 0 auto;
-            overflow: scroll;
-            max-height: 100%;
             position: relative;
-            padding: 15px;
-            background-color: #222222;
+
+            .inner {
+                margin: 0 auto;
+                overflow: scroll;
+                max-height: 100%;
+                position: relative;
+                padding: 15px;
+                background-color: #222222;
+            }
+
+            .resize {
+                content: '';
+                background: rgba(100,50,0,1);
+                height: 100%;
+                width: 15px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateX(50%);
+                z-index: 2;
+            }
             
             & > * {
                 min-height: 100%;
@@ -172,8 +188,10 @@ h2 {
 
         #workspace
         {
-            max-height: 100%;
-            overflow: scroll;
+            .inner {
+               max-height: 100%;
+                overflow: scroll; 
+            }
         
             *[data-state="drag"] {
                 cursor: pointer;

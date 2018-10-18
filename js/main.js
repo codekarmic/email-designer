@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', function(evt) {
-	let dragdrop = new DragDrop();
+	let devents = new DOMEvents();
 
     // set drag events
-    Object.keys(dragdrop.draggables).forEach(function(key) {
-        dragdrop.setEvents(dragdrop.draggables[key],{
+    Object.keys(devents.draggables).forEach(function(key) {
+        devents.setEvents(devents.draggables[key],{
             dragstart : function()
             {
                 let dt = this.dataTransfer;
 
-                if (!dragdrop.isIE11) {
+                if (!devents.isIE11) {
                     // removes ghost image on cursor (Firefox/Chrome)
                     dt.setDragImage(new Image(), 0, 0);
 
@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                 }
 
                 // set handle for dragged element
-                dragdrop.dragged = this.target;
+                devents.dragged = this.target;
 
                 // switch dragging flag to true
-                dragdrop.dragging = true;
+                devents.dragging = true;
 
                 // show dropzones
                 document.querySelectorAll('*[data-state="drop"],*[data-append]').forEach(function(dropzone) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                 this.target.removeAttribute('draggable');
 
                 // switch dragging flag to false
-                dragdrop.dragging = false;
+                devents.dragging = false;
 
                 // hide dropzones
                 document.querySelectorAll('*[data-state="drop"],*[data-append]').forEach(function(dropzone) {
@@ -47,12 +47,12 @@ document.addEventListener('DOMContentLoaded', function(evt) {
     });
 
     // set dropzone events
-    Object.keys(dragdrop.dropzones).forEach(function(key) {
-        dragdrop.setEvents(dragdrop.dropzones[key],{
+    Object.keys(devents.dropzones).forEach(function(key) {
+        devents.setEvents(devents.dropzones[key],{
             dragenter : function() {
                 // enables dropzones when dragging
                 if (this.target.dataset.state === 'drop') {
-                    if (this.target !== dragdrop.dragged.parentNode) {
+                    if (this.target !== devents.dragged.parentNode) {
                         this.preventDefault();
                     }
                 }
@@ -61,32 +61,32 @@ document.addEventListener('DOMContentLoaded', function(evt) {
             {
                 // enables dropzones when dragging
                 if(this.target.dataset.state === 'drop') {
-                    if (this.target !== dragdrop.dragged.parentNode) {
+                    if (this.target !== devents.dragged.parentNode) {
                         this.preventDefault();
                     }
                 }
             },
             dragleave : function()
             {
-                if (this.target !== dragdrop.dragged.parentNode
+                if (this.target !== devents.dragged.parentNode
                     && this.target.dataset.state === 'drop') {
                 }
             },
             drop : function()
             {
-                if (this.target !== dragdrop.dragged.parentNode
+                if (this.target !== devents.dragged.parentNode
                     && !this.target.dataset.append) {
-                    dragdrop.dragged.removeAttribute('draggable');
-                    let clone = dragdrop.dragged.cloneNode(true);
+                    devents.dragged.removeAttribute('draggable');
+                    let clone = devents.dragged.cloneNode(true);
                     dragging = false;
 
-                    switch(dragdrop.dragged.dataset.method) {
+                    switch(devents.dragged.dataset.method) {
                         case 'move':
-                            this.target.appendChild(dragdrop.dragged);
+                            this.target.appendChild(devents.dragged);
                             break;
 
                         case 'copy':
-                            dragdrop.copyDrag(clone,this.target.querySelector('.email-container'));
+                            devents.copyDrag(clone,this.target.querySelector('.email-container'));
                             break;
                     }
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                     this.target.style.background = "";
 
                     // switch dragging flag to true
-                    dragdrop.dragging = true;
+                    devents.dragging = true;
 
                     // Remove initial instructions
                     if (document.querySelector('.initial-block')) {
@@ -113,5 +113,22 @@ document.addEventListener('DOMContentLoaded', function(evt) {
                 }
             },
         });
+    });
+
+    // set resize events
+
+    document.querySelectorAll('.resize').forEach(function(el)
+    {
+    	devents.setEvents(el,
+    	{
+    		pointerdown : function()
+    		{
+    			console.log(this);
+    		},
+    		pointermove : function()
+    		{
+    			console.log(this);
+    		}
+    	});
     });
 });
